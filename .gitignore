@@ -9,3 +9,6 @@ coverage
 .idea
 *.log
 .history
+
+todo.md
+logs
