@@ -6,8 +6,8 @@ export default class DeviceRepository extends BaseRepository {
     super(Device);
   }
 
-  async findByName(ip) {
-    return this.model.findOne({ ipAdress: ip });
+  async findByName(name) {
+    return this.model.findOne({ name });
   }
 }
 

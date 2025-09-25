@@ -10,6 +10,17 @@ class DeviceService {
       return await deviceRepository.create({ name, type, parameters, position, status });
    }
 
+   async getAllDevices() {
+      return await deviceRepository.find();
+   }
+
+   async getDeviceById(id) {
+      const device = await deviceRepository.findById(id);
+      if (!device) throw new AppError("Device not found", 404)
+
+      return await device;
+   }
+
    async renameDevice(id, newName) {
       const device = await deviceRepository.findById(id);
       if (!device) throw new AppError("Device not found", 404);

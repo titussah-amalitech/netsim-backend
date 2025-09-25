@@ -2,9 +2,12 @@ import express from "express";
 import { validate } from "../middleware/validation.middleware.js";
 import { deviceController } from '../controllers/index.controller.js'
 import { addDeviceSchema, renameDeviceSchema } from "../validations/device.validation.js";
+import { userIdParamSchema } from '../validations/index.validation.js'
 
 const router = express.Router();
 
+router.get('/', deviceController.getAllDevices);
+router.get('/:id', validate(userIdParamSchema), deviceController.getDeviceById);
 router.post('/', validate(addDeviceSchema), deviceController.addDevice);
 router.put("/:id", validate(renameDeviceSchema), deviceController.renameDevice);
 router.delete("/:id", deviceController.deleteDevice);

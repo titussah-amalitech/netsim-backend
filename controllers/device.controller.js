@@ -3,6 +3,19 @@ import { asyncHandler } from "../utils/helpers/asyncHandler.helper.js";
 import ResponseHelper from "../utils/helpers/response.helper.js";
 
 const deviceController = {
+   getAllDevices: asyncHandler(async (req, res, next) => {
+      const devices = await deviceService.getAllDevices();
+
+      return ResponseHelper.success(res, devices, "Devices retrieved successfully")
+   }),
+
+   getDeviceById: asyncHandler(async (req, res, next) => {
+      const { id } = req.params;
+      const device = await deviceService.getDeviceById(id);
+
+      return ResponseHelper.success(res, device, "Devices retrieved successfully")
+   }),
+
    addDevice: asyncHandler(async (req, res, next) => {
       const { name, type, position, parameters, status } = req.body;
       const device = await deviceService.addDevice({ name, type, parameters, position, status });

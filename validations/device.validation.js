@@ -13,10 +13,6 @@ export const addDeviceSchema = Joi.object({
          "any.only": "Device type must be one of router, switch, server, pc, other",
          "any.required": "Device type is required",
       }),
-   position: Joi.object({
-      x: Joi.number().default(0),
-      y: Joi.number().default(0),
-   }).default({ x: 0, y: 0 }),
    parameters: Joi.object({
       pingInterval: Joi.number().default(30),
       latencyThreshold: Joi.number().default(100),
@@ -28,11 +24,7 @@ export const addDeviceSchema = Joi.object({
       failureProbability: 0.1,
       trafficLoad: 0,
    }),
-   status: Joi.object({
-      online: Joi.boolean().default(true),
-      latency: Joi.number().default(0),
-      lastChecked: Joi.date().default(Date.now),
-   }).default({ online: true, latency: 0, lastChecked: Date.now() }),
+ description: Joi.string().allow("").max(500).default("")
 });
 
 // Validation schema for renaming a device
