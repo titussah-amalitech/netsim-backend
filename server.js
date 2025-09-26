@@ -5,6 +5,7 @@ import { logger } from "./utils/helpers/logger.helper.js";
 import routes from "./routes/index.route.js";
 import { connectDB } from "./config/database.config.js";
 import corsOptions from "./config/cors.config.js";
+import scenarioRouter from "./routes/scenario.route.js";
 
 // Load environment variables from .env
 dotenv.config();
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/api', routes)
+app.use('/api/scenarios', scenarioRouter)
 
 app.listen(PORT, () => {
   logger.info(`Server is running on http://localhost:${PORT}`);
