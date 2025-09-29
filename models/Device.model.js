@@ -4,7 +4,7 @@ const deviceSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, unique: true },
     type: { type: String, enum: ["router", "switch", "server", "pc", "other"], required: true },
-
+    status: { type: String, enum: ["online", "offline","warning"], default: "Online" },
     parameters: {
       pingInterval: { type: Number, default: 30 },          // seconds
       latencyThreshold: { type: Number, default: 100 },      // ms
