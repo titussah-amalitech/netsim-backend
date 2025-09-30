@@ -1,58 +1,23 @@
-import mongoose from "mongoose"
-import Scenario from "../models/Scenario.model.js"
+
+import { asyncHandler } from "../utils/helpers/asyncHandler.helper.js"
+import { scenarioService } from "../services/scenario.service.js"
+import ResponseHelper from "../utils/helpers/response.helper.js"
 
 const scenarioController = {
 
-    createScenario: async(req, res, next) => {
-        const session = await mongoose.startSession()
-        session.startTransaction()
-        try {
-            const { name, difficulty, timeLimit, devices, metadata } = await req.body
+    createScenario: asyncHandler( async(req, res, next) => {
+        const scenario = await scenarioService.addScenario(req.body)
 
-            const newScenario = Scenario.create([{
-                name,
-                difficulty,
-                timeLimit,
-                devices,
-                metadata
-
-            }], { session })
-
-            res.status(201).json({
-                success: true,
-                message: "Scenario created successfully",
-                data: newScenario
-            })
-
-            await session.commitTransaction()
-        } catch (error) {
-            session.abortTransaction()
-            session.endSession()
-            console.log(`Error Saving Scenario: ${error}`)
-        }
-    },
+        return ResponseHelper.success(res, scenario, 'Scenario created successfully', 201) 
+    }),
 
 
-    loadScenario: async(req, res, next) => {
-        try {
-            const id = req.params.id
+    loadScenario: asyncHandler(async(req, res, next) => {
+        const scenario = await scenarioService.getScenario(req.params.id)
+        console.log(scenario, req.params.id)
 
-            const scenario = await Scenario.findById(id)
-
-            if(!scenario){
-                const error = new Error("Scenario Not Found")
-                error.statusCode = 404
-                throw error
-
-            }
-            res.status(200).json({
-                success: true,
-                data: scenario
-            })
-        } catch (error) {
-            console.log(`Error Loading Scenario: ${error}`)
-        }
-    }
+        return ResponseHelper.success(res, scenario, 'Scenario Found', 200)
+    })
 }
 
 export default scenarioController
