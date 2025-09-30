@@ -35,7 +35,19 @@ export const createScenarioSchema = Joi.object({
 
   metadata: Joi.object({
     createdBy: Joi.string().default("admin"),
-    createdAt: Joi.date().default(() => new Date(), "current date"),
+    createdAt: Joi.date().default(() => new Date()),
     description: Joi.string().allow("").max(500).default(""),
   }).default({}),
+});
+
+export const updateScenarioSchema = Joi.object({
+  body: Joi.object({
+    name: Joi.string(),
+    difficulty: Joi.string().valid("easy", "medium", "hard"),
+    timeLimit: Joi.number(),
+    description: Joi.string(),
+  }),
+  params: Joi.object({
+    id: Joi.string().hex().length(24).required(),
+  }),
 });
