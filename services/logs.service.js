@@ -1,17 +1,31 @@
 // import AppError from "../utils/appError.js";
+import mongoose from "mongoose";
 import Device from "../models/Device.model.js";
 import Log from "../models/Log.model.js";
 import { logRepository } from "../repositories/log.repository.js";
+
 class LogsServices {
   async getLogs() {
     return await logRepository.find();
   }
 
   async getLogsByDevice(id) {
-    const logs = await logRepository.findLogsByDevice(id);
-    // if (!logs) throw new AppError("Unable to get logs", 404);
+    // Diagnostic: log incoming id to help trace CastError sources
+    console.debug("getLogsByDevice called with id:", id);
 
-    return await device;
+    // Special-case: allow the literal 'latest' to return the most recent logs
+    if (id === "latest") {
+      return await Log.find().sort({ timestamp: -1 }).limit(10).exec();
+    }
+
+    // Use mongoose's isValid ObjectId check
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      // return empty array for invalid ids instead of letting mongoose throw a CastError
+      return [];
+    }
+
+    const logs = await logRepository.findLogsByDevice(id);
+    return await logs;
   }
 
   //automatically generate logs for a random number of devices
@@ -57,6 +71,8 @@ class LogsServices {
         // 5. Create log entry
         const log = new Log({
           device: device._id,
+          // normalize to lowercase to match Log.deviceType enum
+          deviceType: (device.type || "").toString().toLowerCase(),
           eventType,
           message,
           status: newStatus,
