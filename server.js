@@ -5,14 +5,15 @@ import { logger } from "./utils/helpers/logger.helper.js";
 import routes from "./routes/index.route.js";
 import { connectDB } from "./config/database.config.js";
 import corsOptions from "./config/cors.config.js";
+import {logsService} from "./services/logs.service.js";
 
 // Load environment variables from .env
 dotenv.config();
 
 // Connect to MongoDB with error handling
-logger.info("📊 Connecting to MongoDB...")
+logger.info("Connecting to MongoDB...")
 await connectDB()
-logger.info("✅ MongoDB connected successfully")
+logger.info("MongoDB connected successfully")
 
 
 const app = express();
@@ -30,6 +31,8 @@ app.get("/", (req, res) => {
 
 app.use('/api', routes)
 
+setInterval(() => logsService.generateLogs(), 50000);
+setInterval(() =>  logsService.deleteLogs(), 200000);
 app.listen(PORT, () => {
   logger.info(`Server is running on http://localhost:${PORT}`);
 });
