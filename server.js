@@ -11,9 +11,9 @@ import {logsService} from "./services/logs.service.js";
 dotenv.config();
 
 // Connect to MongoDB with error handling
-logger.info("📊 Connecting to MongoDB...")
+logger.info("Connecting to MongoDB...")
 await connectDB()
-logger.info("✅ MongoDB connected successfully")
+logger.info("MongoDB connected successfully")
 
 
 const app = express();

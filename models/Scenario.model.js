@@ -8,6 +8,7 @@ const scenarioSchema = new mongoose.Schema(
     devices: [
       {
         device: { type: mongoose.Schema.Types.ObjectId, ref: "Device", required: true },
+        type: { type: String, enum: ["router", "switch", "server", "pc", "other"], required: true },
         position: {
           x: { type: Number, default: 0 },
           y: { type: Number, default: 0 },
